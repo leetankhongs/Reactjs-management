@@ -1,44 +1,45 @@
 import React, { Component } from 'react';
+import * as actions from './../actions/index'
+import {connect} from 'react-redux';
 
 class TaskForm extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            ID: '',
-            Name: '',
-            Status: true
+            id: '',
+            name: '',
+            status: true
         }
     }
 
     componentWillMount() {
-        var taskEditing = this.props.task;
+        var {taskEditing} = this.props;
         if (taskEditing) {
-            console.log("Vo")
-            this.state = {
-                ID: taskEditing.ID,
-                Name: taskEditing.Name,
-                Status: taskEditing.Status
-            }
+            this.setState({
+                id: taskEditing.id,
+                name: taskEditing.name,
+                status: taskEditing.status
+            });
         }
     }
 
 
     componentWillReceiveProps(nextProps) {
-        var taskEditing = nextProps.task;
+        var {taskEditing} = nextProps;
 
         if (taskEditing) {
-            this.state = {
-                ID: taskEditing.ID,
-                Name: taskEditing.Name,
-                Status: taskEditing.Status
-            }
+            this.setState({
+                id: taskEditing.id,
+                name: taskEditing.name,
+                status: taskEditing.status
+            });
         } else {
-            this.state = {
-                ID: '',
-                Name: '',
-                Status: true
-            }
+            this.setState({
+                id: '',
+                name: '',
+                status: true
+            });
         }
     }
     onChangeValue = (event) => {
@@ -46,7 +47,7 @@ class TaskForm extends Component {
         var name = target.name;
         var value = target.value;
 
-        if (name === "Status") {
+        if (name === "status") {
             value = target.value === "true" ? true : false;
         }
 
@@ -57,27 +58,37 @@ class TaskForm extends Component {
 
     onSubmit = (event) => {
         event.preventDefault();
-        this.props.onSubmitData(this.state);
-        this.onCloseForm();
+
+        var {taskEditing} = this.props;
+
+        if (taskEditing) {
+            this.props.onUpdateTask(this.state);
+        } else {
+            this.props.onAddTask(this.state);
+        }
+
+        this.resetForm();
     }
 
     onCloseForm = () => {
-        this.props.onExistForm();
+        this.props.onCloseForm();
     }
 
     resetForm = () => {
         this.setState({
-            Name: '',
-            Status: false
+            name: '',
+            status: false
         })
-        this.props.onExistForm();
+        this.props.onCloseForm();
     }
 
     render() {
+        if(this.props.isDisplayForm === false) return '';
+        else
         return (
             <div className="panel panel-warning">
                 <div className="panel-heading">
-                    <h3 className="panel-title">{this.state.ID === "" ? "Thêm Công Việc" : "Chỉnh sửa công việc"}  &nbsp;
+                    <h3 className="panel-title">{this.state.id === "" ? "Thêm Công Việc" : "Chỉnh sửa công việc"}  &nbsp;
                         <span className="fa fa-times-circle text-right" onClick={this.onCloseForm}></span>
                     </h3>
 
@@ -88,22 +99,22 @@ class TaskForm extends Component {
                             <label>Tên :</label>
                             <input type="text"
                                 className="form-control"
-                                name="Name"
+                                name="name"
                                 onChange={this.onChangeValue}
-                                value={this.state.Name}
+                                value={this.state.name}
                             />
                         </div>
                         <label>Trạng Thái :</label>
                         <select className="form-control"
-                            name="Status"
-                            value={this.state.Status}
+                            name="status"
+                            value={this.state.status}
                             onChange={this.onChangeValue}>
                             <option value={true}>Kích Hoạt</option>
                             <option value={false}>Ẩn</option>
                         </select>
                         <br />
                         <div className="text-right">
-                            <button type="submit" className="btn btn-warning">{this.state.ID === "" ? "Thêm" : "Chỉnh sửa"}</button>&nbsp;
+                            <button type="submit" className="btn btn-warning">{this.state.id === "" ? "Thêm" : "Chỉnh sửa"}</button>&nbsp;
                             <button type="button" className="btn btn-danger" onClick={this.resetForm}>Hủy Bỏ</button>
                         </div>
                     </form>
@@ -114,4 +125,25 @@ class TaskForm extends Component {
 
 }
 
-export default TaskForm;
+const mapStateToProps = (state) =>{
+    return{
+        isDisplayForm: state.isDisplayForm,
+        taskEditing: state.taskEditing
+    }
+}
+
+const mapDispatchToProps = (dispatch, props) =>{
+    return {
+        onAddTask: (task)=>{
+            dispatch(actions.addTask(task));
+        },
+        onCloseForm: ()=>{
+            dispatch(actions.closeForm());
+        },
+        onUpdateTask: (task) =>{
+            dispatch(actions.updateTask(task));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskForm);

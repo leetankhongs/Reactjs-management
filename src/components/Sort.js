@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import * as actions from './../actions/index'
+import {connect} from 'react-redux';
 import '../App.css'
 
 class Sort extends Component {
@@ -15,7 +17,7 @@ class Sort extends Component {
             Type: type
         })
 
-        this.props.sortBy(type);
+        this.props.onSortList(type);
     }
     
 
@@ -54,5 +56,17 @@ class Sort extends Component {
     }
 
 }
+const mapStateToProps = (state) =>{
+    return {
+    }   
+}
 
-export default Sort;
+const mapDispatchToProps = (dispatch, props) =>{
+    return {
+        onSortList: (value) =>{
+            dispatch(actions.sortList(value));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sort);
