@@ -88,7 +88,7 @@ class TaskForm extends Component {
         return (
             <div className="panel panel-warning">
                 <div className="panel-heading">
-                    <h3 className="panel-title">{this.state.id === "" ? "Thêm Công Việc" : "Chỉnh sửa công việc"}  &nbsp;
+                    <h3 className="panel-title">{this.state.id === "" ? "Thêm CRUSH" : "Chỉnh sửa CRUSH"}  &nbsp;
                         <span className="fa fa-times-circle text-right" onClick={this.onCloseForm}></span>
                     </h3>
 

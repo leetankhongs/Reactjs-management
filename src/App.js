@@ -53,7 +53,7 @@ class App extends Component {
         return (
             <div className="container">
                 <div className="text-center">
-                    <h1>Quản Lý Công Việc</h1>
+                    <h1>Quản Lý CRUSH</h1>
                     <hr />
                 </div>
                 <div className="row">
@@ -62,7 +62,7 @@ class App extends Component {
                     </div>
                     <div className={isDisplayForm === true ? "col-xs-8 col-sm-8 col-md-8 col-lg-8" : "col-xs-12 col-sm-12 col-md-12 col-lg-12"}>
                         <button type="button" className="btn btn-primary" onClick={this.addTask}>
-                            <span className="fa fa-plus mr-5"></span>&nbsp;Thêm Công Việc
+                            <span className="fa fa-plus mr-5"></span>&nbsp;Thêm CRUSH
                         </button>&nbsp;
                         <div className="row mt-15">
                             <Controll searchList={this.searchList} sortBy={this.sortBy} />
